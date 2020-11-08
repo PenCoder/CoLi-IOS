@@ -1,0 +1,336 @@
+[
+    {
+        "name":"Victoriaborg",
+        "neighbourhoods":
+        [
+            "Ministries", 
+            "Kinbu"
+        ]
+    },
+    {
+        "name":"East Ridge",
+        "neighbourhoods":
+        [
+            "Gold Coast City"
+        ]
+    },
+    {
+        "name":"West Ridge",
+        "neighbourhoods":
+        [
+            "Ambassadorial Enclave"
+        ]
+    },
+    {
+        "name":"Usshertown",
+        "neighbourhoods":
+        [
+            "Makola", 
+            "High Street",
+            "Rawlings Park",
+            "Okaishie",
+            "Tudu"
+        ]
+    },
+    {
+        "name":"Osu",
+        "neighbourhoods":
+        [
+            "Ringway Estates", 
+            "Kuku Hill",
+            "Osu-Ako Adjei",
+            "Osu-Alata/Ashange",
+            "Osu-RE",
+            "Osu Kinkawe"
+        ]
+    },
+    {
+        "name":"Cantoments",
+        "neighbourhoods":
+        [
+            "El-Wak", 
+            "East Cantoments"
+        ]
+    },
+    {
+        "name":"Airport Residential Area",
+        "neighbourhoods":
+        [
+            "Airport City", 
+            "HIPC Junction",
+            "Spintex"
+        ]
+    },
+    {
+        "name":"Adabraka",
+        "neighbourhoods":
+        [
+            "Circle", 
+            "Odawna",
+            "Sabon Zongo",
+            "New Town"
+        ]
+    },
+    {
+        "name":"Dansonman",
+        "neighbourhoods":
+        [
+            "Russia", 
+            "Sahara",
+            "Sukura",
+            "Shiabu",
+            "Dansoman Estates",
+            "Santa Maria",
+            "Old Dansoman",
+            "Dansoman Amanhoma",
+            "SSNIT Flats",
+            "Akokofoto",
+            "Tweneboa",
+            "Sakaman"
+        ]
+    },
+    {
+        "name":"Kaneshie",
+        "neighbourhoods":
+        [
+            "Awudome", 
+            "First Light",
+            "North Kaneshie",
+            "Kwashieman"
+        ]
+    },
+    {
+        "name":"West Legon/Westlands",
+        "neighbourhoods":
+        [
+            "Kisseman", 
+            "Christian Village",
+            "Haatso"
+        ]
+    },
+    {
+        "name":"Abelemkpe",
+        "neighbourhoods":
+        [
+            "Old Abelemkpe", 
+            "New Abelemkpe/Abelemkpe Forest"
+        ]
+    },
+    {
+        "name":"East Legon",
+        "neighbourhoods":
+        [
+            "Shiashie", 
+            "Bawaleshie",
+            "South Shiashie",
+            "Okplongo",
+            "Adjiriganor",
+            "Nmai Djorn",
+            "American House",
+            "Trassaco",
+            "Boyeman",
+            "ARS"
+        ]
+    },
+    {
+        "name":"Awoshie",
+        "neighbourhoods":
+        [
+            "Odorgornor", 
+            "Regimanuel Estates",
+            "Ablekuma",
+            "Anya",
+            "Palace Town",
+            "NIC",
+            "Asorfa",
+            "Tabora",
+            "Tantra Hill"
+        ]
+    },
+    {
+        "name":"Lartebiokorshie",
+        "neighbourhoods":
+        [
+            "Zoti Area"
+        ]
+    },
+    {
+        "name":"Odorkor",
+        "neighbourhoods":
+        [
+            "North Odorkor", 
+            "South Odorkor",
+            "Official Town"
+        ]
+    },
+    {
+        "name":"Labadi",
+        "neighbourhoods":
+        [
+            "South Labadi", 
+            "Labadi-Aborm"
+        ]
+    },
+    {
+        "name":"Tesano",
+        "neighbourhoods":
+        [
+            "South Tesano", 
+            "Achimota",
+            "Lapaz",
+            "Abeka",
+            "Nyamekye"
+        ]
+    },
+    {
+        "name":"Teshie Nungua",
+        "neighbourhoods":
+        []
+    },
+    {
+        "name":"Kanda",
+        "neighbourhoods":
+        [
+            "Kanda Estates", 
+            "37",
+            "Mamobi",
+            "Nima",
+            "Abelemkpe",
+            "Kawukudi"
+        ]
+    },
+    {
+        "name":"Mamprobi",
+        "neighbourhoods":
+        [
+            "Korle-Bu", 
+            "Korle-Gono"
+        ]
+    },
+    {
+        "name":"Gbawe",
+        "neighbourhoods":
+        [
+            "Gbawe Zero", 
+            "Mallam"
+        ]
+    },
+    {
+        "name":"Weija",
+        "neighbourhoods":
+        [
+            "Krokrobite", 
+            "Satelite",
+            "Tuba",
+            "Aplaku",
+            "Red Top",
+            "Bortianor",
+            "New Bortianor",
+            "Broadcasting",
+            "Amamfrong",
+            "Weija 1-4",
+            "Old Weija",
+            "Tetegu",
+            "Kasoa"
+        ]
+    },
+    {
+        "name":"Tema",
+        "neighbourhoods":
+        [
+            "Ashaiman", 
+            "Baatsonaa"
+        ]
+    },
+    {
+        "name":"Nsawam",
+        "neighbourhoods":
+        [
+            "Medie", 
+            "Kotoku",
+            "Kuntunse",
+            "Saperman",
+            "Amasaman",
+            "Samsam",
+            "Pokuasi",
+            "Afankor"
+        ]
+    },
+    {
+        "name":"Berekuso",
+        "neighbourhoods":
+        [
+            "Commet", 
+            "ACP"
+        ]
+    },
+    {
+        "name":"Kwabenya",
+        "neighbourhoods":
+        [
+            "Ayarifa"
+        ]
+    },
+    {
+        "name":"Abokobi",
+        "neighbourhoods":
+        [
+            "Danfa", 
+            "Pantang",
+            "Aye Mensah"
+        ]
+    },
+    {
+        "name":"Madina",
+        "neighbourhoods":
+        [
+            "Agbogba", 
+            "Haatso"
+        ]
+    },
+    {
+        "name":"Adenta",
+        "neighbourhoods":
+        [
+            "Lakeside", 
+            "Oyibi",
+            "Dodowa"
+        ]
+    },
+    {
+        "name":"Labone",
+        "neighbourhoods":
+        []
+    },
+    {
+        "name":"Airport West",
+        "neighbourhoods":
+        [
+            "Dzorwulu", 
+            "Kinbu"
+        ]
+    },
+    {
+        "name":"Spintex",
+        "neighbourhoods":
+        [
+            "Sakumono"
+        ]
+    },
+    {
+        "name":"Kasoa",
+        "neighbourhoods":
+        [
+            "Senya Breku",
+            "Gomoa",
+            "Budumburam",
+            "Gyeda",
+            "Awutu Breku",
+            "Nyanyano",
+            "Papasi",
+            "Kodua",
+            "Iron City"
+
+        ]
+    }
+]

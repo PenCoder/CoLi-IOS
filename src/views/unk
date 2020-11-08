@@ -1,0 +1,35 @@
+{
+                    //this.state.packs.map((pack, index) => {
+                        
+                        //ToastAndroid.show(pack['Plan_name'], ToastAndroid.LONG);
+                        
+                        {/* <ListItem
+                            title={pack['Plan_name']}
+                            subtitle={pack['Play_type']}
+                            topDivider
+                            bottomDivider
+                            chevron
+                            titleStyle={{color: 'rgba(139,195,74 ,1)'}}
+                            subtitleStyle={{color: 'rgba(139,195,74 ,1)'}}
+                            containerStyle={{borderRadius: 10, marginVertical: 10}}
+                            leftIcon={{name: 'dollar', type: 'foundation', color: 'rgba(139,195,74 ,1)', raised: true, reverse: true}}
+                            onPress={() => this.props.navigation.navigate('Payment')}    
+                        /> */}
+                    //}) 
+                    
+                }
+                    {/* <Card>
+                        <CardItem style={{justifyContent: 'center'}}>
+                            <Avatar
+                                rounded
+                                size="xlarge"
+                                icon={{name: "package", type: "feather"}}
+                                overlayContainerStyle={{backgroundColor: 'rgba(139,195,74 ,1)', elevation: 10}}
+                            />
+                        </CardItem>
+                        <CardItem style={{justifyContent: 'center'}}>
+                            <H1>{GLOBAL.user[0]['Plan Name']}</H1>
+                        </CardItem>
+                    </Card>
+                        */}
+                    
