@@ -8,8 +8,8 @@ import defaultStyles from '../../styles';
 import AsyncStorage from '@react-native-community/async-storage';
 import { RNToasty } from 'react-native-toasty'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { ActivityIndicator } from 'react-native-paper';
 import { observer, inject } from 'mobx-react';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const { width } = Dimensions.get('screen');
 
@@ -34,21 +34,12 @@ export default class AddAccount extends React.Component {
         return (
 
             <View style={{ flex: 1, backgroundColor: 'white' }}>
-                <Overlay
-                    isVisible={this.state.isLoading}
-                    overlayStyle={{ backgroundColor: 'transparent', elevation: 0 }}
-                    containerStyle={{ backgroundColor: 'rgba(250, 250, 250, 0.9)' }}>
-                    <View style={{ flex: 1, justifyContent: 'center' }}>
-                        <ActivityIndicator
-                            size="large"
-                            style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}
-                        />
-                    </View>
-                </Overlay>
+                <Spinner
+                    visible={this.state.isLoading}
+                    textContent={'Loading...'}
+                    textStyle={{ color: '#fff' }}
+                    cancelable={true}
+                />
 
                 <CardItem style={{ width: width, }}>
                     <View style={{ margin: 10, marginLeft: 30 }}>

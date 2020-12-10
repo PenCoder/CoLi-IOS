@@ -1,10 +1,8 @@
 import React from 'react';
-import { Overlay } from 'react-native-elements';
-import { ActivityIndicator } from 'react-native';
-import { View } from 'native-base';
 import AsyncStorage from '@react-native-community/async-storage';
 import { RNToasty } from 'react-native-toasty';
 import { inject, observer } from 'mobx-react';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 @inject('globalProps')
 @observer
@@ -20,21 +18,12 @@ export default class Router extends React.Component {
     }
     render() {
         return (
-            <Overlay
-                isVisible={this.state.isLoading}
-                overlayStyle={{ backgroundColor: 'transparent', elevation: 0 }}
-                containerStyle={{ backgroundColor: 'rgba(250, 250, 250, 0.9)' }}>
-                <View style={{ flex: 1, justifyContent: 'center' }}>
-                    <ActivityIndicator
-                        size="large"
-                        style={{
-                            flex: 1,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                        }}
-                    />
-                </View>
-            </Overlay>
+            <Spinner
+                visible={this.state.isLoading}
+                textContent={'Loading...'}
+                textStyle={{ color: '#fff' }}
+                cancelable={true}
+            />
         )
     }
     componentDidMount() {
@@ -71,9 +60,9 @@ export default class Router extends React.Component {
                         fetch('http://api.coliserver.com/pmsapi.php?op=listpackage')
                             .then(packResponse => packResponse.json())
                             .then(async (packs) => {
-                                this.Global.updateProp('packs', packs);
+                                // this.Global.updateProp('packs', packs);
                                 // GLOBAL.packs = packs;
-                                this.Global.packs.map(plan => {
+                                packs.map(plan => {
                                     if (
                                         plan['Plan_name'].toLowerCase() == this.Global.user['Plan Name'].toLowerCase()
                                     ) {

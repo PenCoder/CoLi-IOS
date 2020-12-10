@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, TouchableNativeFeedback, ScrollView, Dimensions, Animated } from 'react-native';
+import { StyleSheet, TouchableNativeFeedback, ScrollView, Dimensions, Animated, Alert, SafeAreaView } from 'react-native';
 import { CardItem, H3, Text, Button, View, Icon as NIcon } from 'native-base';
-import { Icon, Avatar, ListItem, Divider } from 'react-native-elements';
+import { Icon, Avatar, ListItem, Divider, Overlay } from 'react-native-elements';
 
 import defaultStyles from '../../styles';
 
@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 import { RNToasty } from 'react-native-toasty';
 import { observer, inject } from 'mobx-react';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const { width } = Dimensions.get('screen');
 
@@ -53,35 +54,46 @@ export default class Home extends React.Component {
             duration: validDays,
             remainingSec: remainingSec,
 
-            top_up: 0
+            top_up: 0,
+
+            isInProgress: false
         }
     }
 
     render() {
+        const { topup_balance, pack } = this.props.globalProps;
+
         return (
 
-            <View style={{ flex: 1, backgroundColor: 'rgba(242, 245, 247,1.0)', paddingBottom: 10 }}>
+            <SafeAreaView style={{ flex: 1, backgroundColor: 'rgba(242, 245, 247,1.0)', paddingBottom: 10 }}>
+                <Spinner
+                    visible={this.state.isInProgress}
+                    textContent={'Loading...'}
+                    textStyle={{ color: '#fff' }}
+                    cancelable={true}
+                />
 
-                <CardItem style={{ justifyContent: 'center', elevation: 3, borderBottomRightRadius: 35 }}>
-                    <CardItem style={{ height: 70, borderBottomRightRadius: 50, top: -14, left: -12, alignSelf: 'flex-start', paddingBottom: -15, elevation: 1, position: 'absolute' }}>
+                <View style={{ alignItems: 'center', flexDirection: 'row', backgroundColor: '#fff', elevation: 3, borderBottomRightRadius: 35 }}>
+                <Icon name="chevron-thin-left" raised type="entypo" color="grey" onPress={() => this.props.navigation.navigate('Welcome')} />
+                    {/* <CardItem style={{ height: 70, borderBottomRightRadius: 50, left: -12, alignSelf: 'flex-start', paddingBottom: -15, elevation: 1,  }}>
                         <Text style={{ color: '#1565C0', fontSize: 28, fontWeight: 'bold' }}>C</Text>
                         <Text style={{ color: '#4CAF50', fontSize: 28, fontWeight: 'bold' }}>o</Text>
                         <Text style={{ color: '#FFC107', fontSize: 28, fontWeight: 'bold' }}>L</Text>
                         <Text style={{ color: '#D50000', fontSize: 28, fontWeight: 'bold' }}>i</Text>
-                    </CardItem>
+                    </CardItem> */}
                     <Icon name='home' type='font-awesome' color='#0288D1' size={28} />
                     <H3 style={{ color: '#0288D1', fontWeight: 'bold', margin: 5 }}>Home</H3>
-                </CardItem>
+                </View>
 
                 <ScrollView style={{ flex: 1, }}>
                     <View style={{ flex: 1 }}>
 
-                        <View style={{ backgroundColor: 'white', paddingTop: 20, borderRadius: 20, width: width }}>
+                        <View style={{ paddingTop: 20, borderRadius: 20, width: width }}>
 
                             <Avatar
                                 rounded size={185}
                                 containerStyle={{ flex: 1, alignSelf: 'center', alignItems: 'center', justifyContent: 'center', margin: 10 }}
-                                overlayContainerStyle={{ backgroundColor: 'white', elevation: 10 }}
+                                overlayContainerStyle={{ backgroundColor: 'white', ...defaultStyles.shadow10 }}
                                 onPress={() => this.props.navigation.navigate('Stats')}
                                 ImageComponent={() =>
                                     <CountdownCircleTimer
@@ -117,18 +129,19 @@ export default class Home extends React.Component {
                             >
                                 <ListItem
                                     title={'Account Balance'}
-                                    subtitle={'GH₵ ' + this.GlobalProps.topup_balance}
+                                    subtitle={'GH₵ ' + topup_balance}
                                     titleStyle={{ fontSize: 12, color: 'grey' }}
                                     subtitleStyle={{ fontSize: 20, fontWeight: 'bold', color: '#4CAF50' }}
                                     leftIcon={{ name: 'sack', type: 'material-community', color: '#4CAF50', raised: true }}
-                                    rightElement={
-                                        <Button success small iconRight
-                                            style={{ elevation: 9 }}
-                                            onPress={() => this.props.navigation.navigate('TopUp')}
-                                        >
-                                            <Text>Top Up</Text>
-                                        </Button>
-                                    }
+                                    // rightElement={
+                                    //     <Button success small iconRight
+                                    //         style={defaultStyles.shadow10}
+                                    //         onPress={() => this.renewWithTopUp()}
+                                    //         disabled={topup_balance < pack['Pack_Cost']}
+                                    //     >
+                                    //         <Text>Renew</Text>
+                                    //     </Button>
+                                    // }
                                     containerStyle={{}}
                                 />
                             </View>
@@ -154,13 +167,11 @@ export default class Home extends React.Component {
                                         }}
                                     />
                                     <View>
-                                        <Button primary small
+                                        <Button info small
                                             style={{ elevation: 10 }}
-                                            onPress={() => {
-                                                this.goToRenew()
-                                            }}
+                                            onPress={() => this.props.navigation.navigate('Packages')}
                                         >
-                                            <Text>Renew</Text>
+                                            <Text>Purchase</Text>
                                         </Button>
                                     </View>
 
@@ -169,9 +180,9 @@ export default class Home extends React.Component {
 
                         </View>
 
-                        <View style={{ backgroundColor: 'rgba(236, 239, 241,1.0)', borderRadius: 20, width: width }}>
+                        <View style={{ backgroundColor: 'rgba(236, 239, 241,1.0)', borderRadius: 20, paddingHorizontal: 10, width: width }}>
 
-                            <View style={{ marginTop: 20 }}>
+                            <View >
                                 <ListItem
                                     title={'Timeline'}
                                     subtitle={this.days + ' days to expire'}
@@ -183,6 +194,7 @@ export default class Home extends React.Component {
                                         <View style={{ width: 5, height: '100%', backgroundColor: '#1565C0' }}></View>
                                     }
                                     onPress={() => this.props.navigation.navigate('Timeline')}
+                                    containerStyle={{ margin: 10 }}
                                 />
                                 <Divider style={{ flex: 1 }} />
                                 <ListItem
@@ -196,6 +208,7 @@ export default class Home extends React.Component {
                                         <View style={{ width: 5, height: '100%', backgroundColor: '#1565C0' }}></View>
                                     }
                                     onPress={this.onViewPackage.bind(this)}
+                                    containerStyle={{ margin: 10 }}
                                 />
                             </View>
 
@@ -203,7 +216,7 @@ export default class Home extends React.Component {
                     </View>
                 </ScrollView>
 
-            </View>
+            </SafeAreaView>
         )
     }
     componentDidMount() {
@@ -263,8 +276,79 @@ export default class Home extends React.Component {
         }
 
     }
-    // Go To Renew
-    goToTopUp = () => {
+    // Renew With Top Up 
+    renewWithTopUp = async () => {
+
+        const { selectedPack, pack, topup_balance, user, activePacks } = this.props.globalProps;
+        if (!activePacks.includes(pack['Plan_name'])) {
+            RNToasty.Warn({
+                title: 'Package not available for renewal',
+                position: 'bottom',
+                duration: 1
+            })
+        }
+        else
+            Alert.alert(
+                "Confirm",
+                `Confirm topup with balance for \nPackage: ${pack.Plan_name} \nCost: ${pack.Pack_Cost} \n or cancel`,
+                [
+                    { text: 'cancel', style: 'cancel' },
+                    {
+                        text: 'Confirm',
+                        onPress: async () => {
+                            // Start Loading Indicator 
+                            this.setState({ isInProgress: true });
+
+                            if (topup_balance >= pack['Pack_Cost']) {
+                                this.setState({
+                                    isInProgress: true
+                                })
+                                try {
+                                    var formData = new FormData();
+                                    formData.append('usnm', user.username);
+                                    formData.append('phone', user.phone);
+                                    formData.append('pack_cost', pack['Pack_Cost']);
+                                    formData.append('pack', pack['Plan_name']);
+                                    formData.append('renew-with-top-up', '_-_');
+
+                                    var response = await fetch('https://coli.com.gh/dashboard/payments/topup_renewal.php', {
+                                        method: 'POST',
+                                        body: formData,
+                                        header: {
+                                            'Accept': 'application/json',
+                                            'Content-Type': 'multipart/form-data'
+                                        }
+                                    });
+                                    var res = await response.text();
+                                    if (res == 'success') {
+                                        RNToasty.Success({
+                                            title: 'Successfully renewed',
+                                            position: 'bottom'
+                                        });
+                                        // Restart To Home 
+                                        this.props.navigation.navigate('Router');
+                                    } else if (res == 'failed') {
+                                        alert('Could not renew account at the moment.')
+                                    } else if (res == 'insufficient') {
+                                        alert('Insufficent balance for renewal.')
+                                    } else {
+                                        alert(res);
+                                    }
+                                } catch (e) {
+                                    RNToasty.Warn({
+                                        title: e.message,
+                                        position: 'bottom'
+                                    })
+                                } finally {
+                                    this.setState({
+                                        isInProgress: false
+                                    })
+                                }
+                            }
+                        }
+                    }
+                ]
+            )
 
     }
 
@@ -448,5 +532,9 @@ const styles = StyleSheet.create({
         // paddingRight: 2,
         backgroundColor: 'rgba(255, 255, 255, 0.5)',
         elevation: 2
+    },
+    shadow10: {
+        elevation: 10,
+
     }
 })

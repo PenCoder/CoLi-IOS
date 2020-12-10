@@ -57,8 +57,6 @@ import { Provider } from 'mobx-react';
 import { GlobalProps } from './src/helpers/GlobalProps';
 import AddedProfile from './src/views/AddedProfile';
 import AddedRenew from './src/views/AddedRenew';
-import Agent from './src/views/Agent';
-import SalesReport from './src/views/SalesReport';
 
 // GLobal Props
 GLOBAL = require('./global');
@@ -316,7 +314,8 @@ const Auth = createStackNavigator(
     Register: Register
   },
   {
-    transitionConfig: () => fromLeft()
+    transitionConfig: () => fromLeft(),
+    headerMode: 'none'
   }
 )
 // Referral Authentication Screens
@@ -333,12 +332,7 @@ const RefAuth = createStackNavigator(
 const MainApp = createSwitchNavigator(
   {
     Router: Router,
-    Auth: {
-      screen: Auth,
-      navigationOptions: {
-        header: null
-      }
-    },
+    Auth: Auth,
     HomeStack: MainStack,
     UnMain: UnStack
   }
@@ -361,14 +355,13 @@ const RefMain = createSwitchNavigator(
 const WelcomeStack = createStackNavigator(
   {
     Welcome: Welcome,
-    Agent: Agent,
-    SalesReport: SalesReport,
     Register: Register,
     Main: MainApp,
     Referral: RefMain,
     WebViewer: WebViewer,
   },
   {
+    headerMode: 'none',
     initialRouteName: 'Welcome',
     navigationOptions: {
       headerStyle: { backgroundColor: '#FFFF00' },
@@ -407,7 +400,10 @@ class App extends React.Component {
   constructor(props) {
     super(props);
   }
-  componentDidMount() {
+  async componentDidMount() {
+    // Load Packages 
+    await globalProps.getActivePacks();
+
     codePush.sync(options);
   }
   render() {

@@ -8,8 +8,9 @@ import defaultStyles from '../../styles';
 
 import { Dimensions } from 'react-native';
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
-import { RadioButton, ActivityIndicator, Chip, TextInput } from 'react-native-paper';
+import { RadioButton, Chip, TextInput } from 'react-native-paper';
 import PDFView from 'react-native-view-pdf';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const communities = require('../assets/communities.json');
 
@@ -75,16 +76,12 @@ export default class RefSubscribe extends React.Component {
         const { packageChecked, id_mode } = this.state;
         return (
             <SafeAreaView style={{ flex: 1 }}>
-                <Overlay isVisible={this.state.isLoading}
-                    overlayStyle={{ backgroundColor: 'transparent', elevation: 0 }}
-                    containerStyle={{ backgroundColor: 'rgba(250, 250, 250, 0.7)' }}>
-                    <View style={{ flex: 1, justifyContent: 'center' }}>
-                        <ActivityIndicator
-                            size='large'
-                            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-                        />
-                    </View>
-                </Overlay>
+                <Spinner
+                    visible={this.state.isLoading}
+                    textContent={'Loading...'}
+                    textStyle={{ color: '#fff' }}
+                    cancelable={true}
+                />
 
                 <View style={{ flex: 1, backgroundColor: 'white' }}>
                     <CardItem style={{ justifyContent: 'center', backgroundColor: 'transparent' }}>

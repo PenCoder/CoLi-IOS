@@ -4,8 +4,6 @@ import {Text, Card, CardItem, Thumbnail, H1, H2, H3, Accordion} from 'native-bas
 import { Avatar, Icon, Badge, ListItem, Header } from 'react-native-elements';
 import AsyncStorage  from '@react-native-community/async-storage';
 
-import CollapsibleToolbar from 'react-native-collapsible-toolbar';
-
 // Default Styles
 import defaultStyles from '../../styles';
 // GLOBAL

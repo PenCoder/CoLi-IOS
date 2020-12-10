@@ -32,11 +32,6 @@ export default class Stats extends React.Component {
         const { main } = toJS(this.props.globalProps);
         return (
             <View style={{ ...defaultStyles.full, backgroundColor: 'rgba(236, 239, 241,1.0)' }}>
-
-                <View
-                    style={{ width: width, alignSelf: 'center' }}
-                >
-                </View>
                 <ScrollView
                     style={{ flex: 1, marginTop: 50 }}
                 >
@@ -63,7 +58,7 @@ export default class Stats extends React.Component {
                                         (fill) => (
                                             <>
                                                 <Text>{main === 'UNLIMITED' ? main : main + 'GB'}</Text>
-                                                <Text note style={{ color: 'green' }}>({this.GlobalProps.percentage}%)</Text>
+                                                <Text note style={{ color: 'green' }}>{this.GlobalProps.percentage}%</Text>
                                                 <Text note style={{ textAlign: 'center' }}>actual data.</Text>
                                             </>
                                         )
@@ -109,7 +104,7 @@ export default class Stats extends React.Component {
                             </CardItem>
                         </View>
                         <CardItem bordered cardBody style={{ justifyContent: 'space-between' }}>
-                            <View style={[styles.container, styles.w_50]}>
+                            <View style={[styles.w_50]}>
                                 <ListItem
                                     title={main === 'UNLIMITED' ? main : main + 'GB'}
                                     subtitle="main data"
@@ -120,8 +115,8 @@ export default class Stats extends React.Component {
                                     }}
                                 />
                             </View>
-                            <View style={styles.w_1} />
-                            <View style={[styles.container, styles.w_50]}>
+                            <View style={styles.w_1} ></View>
+                            <View style={[styles.w_50]}>
                                 <ListItem
                                     title="Last Renewal"
                                     subtitle={this.user['Regdate']}
@@ -136,16 +131,16 @@ export default class Stats extends React.Component {
                         <CardItem bordered cardBody style={{ justifyContent: 'space-between' }}>
                             <View style={[styles.container, styles.w_50]}>
                                 <ListItem
-                                    title={this.GlobalProps.outstanding}
+                                    // title={this.GlobalProps.outstanding}
+                                    title="0"
                                     subtitle="outstanding data"
-                                    // leftIcon={{name: 'package', type: 'feather', color: '#63c9b1' raised: true}}
                                     leftAvatar={{
                                         icon: { name: 'package', type: 'feather' },
                                         overlayContainerStyle: { backgroundColor: '#63c9b1' }
                                     }}
                                 />
                             </View>
-                            <View style={styles.w_1} />
+                            <View style={styles.w_1} ></View>
                             <View style={[styles.container, styles.w_50]}>
                                 <ListItem
                                     title="Due Date"

@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, StyleSheet, ToastAndroid, Dimensions, FlatList } from 'react-native';
+import { View, StyleSheet, ToastAndroid, Dimensions, FlatList, RefreshControl } from 'react-native';
 import { Text, CardItem, H1, Button } from 'native-base';
 import { Icon, ListItem } from 'react-native-elements';
 import { Chip } from 'react-native-paper';
 import { inject, observer } from 'mobx-react';
+import defaultStyles from '../../styles';
 
 
 const { width } = Dimensions.get('screen');
@@ -19,7 +20,8 @@ export default class Packages extends React.Component {
 
         // this.fetchPackages.bind(this);
         this.state = {
-            packs: []
+            packs: [],
+            isRefreshing: false
         }
     }
 
@@ -28,7 +30,7 @@ export default class Packages extends React.Component {
         // SET GLOBAL PROPS 
         this.GlobalProps = this.props.globalProps;
 
-        const { packs } = this.state;
+        const { packs, isRefreshing } = this.state;
 
         return (
             <View style={{ flex: 1, backgroundColor: 'rgba(245, 245, 245,1.0)' }}>
@@ -68,13 +70,13 @@ export default class Packages extends React.Component {
                                     subtitleStyle={{ fontSize: 14, }}
                                     rightElement={
                                         <View>
-                                            <Button warning small
-                                                style={{ elevation: 10 }}
+                                            <Button info small
+                                                style={{ ...defaultStyles.shadow10 }}
                                                 onPress={() => {
                                                     this.goToRenew(item)
                                                 }}
                                             >
-                                                <Text>Renew</Text>
+                                                <Text>Select</Text>
                                             </Button>
                                         </View>
                                     }
@@ -92,6 +94,12 @@ export default class Packages extends React.Component {
                                     <Text note style={{ fontSize: 24 }}>No records available</Text>
                                 </View>
                             }
+                            refreshControl={
+                                <RefreshControl
+                                    onRefresh={this.onRefresh}
+                                    refreshing={isRefreshing}
+                                />
+                            }
                         />
                     </View>
                 </View>
@@ -99,22 +107,46 @@ export default class Packages extends React.Component {
         )
     }
 
-    componentDidMount() {
-        this.getPackages();
+    async componentDidMount() {
+        await this.getPackages();
+    }
+    // Refresh Packages 
+    onRefresh = async () => {
+        this.setState({ isRefreshing: true })
+        await this.getPackages();
+        this.setState({ isRefreshing: false })
     }
 
     // Get Packages 
     getPackages = async () => {
         var packs = [];
         try {
-            var response = await fetch('http://api.coliserver.com/pmsapi.php?op=listpackage');
-            packs = await response.json();
+            // var response = await fetch('http://api.coliserver.com/pmsapi.php?op=listpackage');
+            // packs = await response.json();
 
-            var packages = packs.filter((pack) => {
-                return packageNames.find(name => name == pack['Plan_name']);
-            });
-            this.GlobalProps.updateProp('packs', packages);
-            this.setState({ packs: packages })
+            // var body = new FormData();
+            // body.append('mob-get-active-packs');
+            // var activeResponse = await fetch(
+            //     'https://coli.com.gh/php/packages.php',
+            //     {
+            //         body: body,
+            //         method: 'POST',
+            //         header: {
+            //             Accept: 'application/json',
+            //             'Content-Type': 'multipart/form-data',
+            //         },
+            //     }
+            // );
+            // var activeNames = await activeResponse.json();
+
+            // var packages = packs.filter((pack) => {
+            //     return activeNames.find(name => name == pack['Plan_name']);
+            // });
+            // this.GlobalProps.updateProp('packs', packages);
+            // this.GlobalProps.updateProp('activePacks', activeNames);
+
+            await this.props.globalProps.getActivePacks();
+            this.setState({ packs: this.props.globalProps.packs });
 
         } catch (e) {
             ToastAndroid.show(e.message, ToastAndroid.LONG);

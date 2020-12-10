@@ -1,11 +1,12 @@
 import React from 'react';
-import { ScrollView, StyleSheet, SafeAreaView, Dimensions, Alert, ActivityIndicator } from 'react-native';
+import { ScrollView, StyleSheet, SafeAreaView, Dimensions, Alert } from 'react-native';
 import { Text, CardItem, Button, H1, H3, View, H2 } from 'native-base';
 import { Icon, Input, Overlay, Avatar, Divider } from 'react-native-elements';
 
 import { RadioButton, Chip } from 'react-native-paper';
 import { RNToasty } from 'react-native-toasty';
 import { inject, observer } from 'mobx-react';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 // const Flutterwave = require('flutterwave-node-v3');
 // GLOBAL
@@ -63,30 +64,20 @@ export default class TopUp extends React.Component {
 
         return (
             <SafeAreaView style={{ flex: 1, backgroundColor: 'rgba(236, 239, 241,1.0)' }}>
-
-                <Overlay
-                    isVisible={this.state.isInProgress}
-                    overlayStyle={{ backgroundColor: 'transparent', elevation: 0 }}
-                    containerStyle={{ backgroundColor: 'rgba(250, 250, 250, 0.9)' }}>
-                    <View style={{ flex: 1, justifyContent: 'center' }}>
-                        <ActivityIndicator
-                            size="large"
-                            style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}
-                        />
-                    </View>
-                </Overlay>
-                <View style={{ flex: 1 }}>
+                <Spinner
+                    visible={this.state.isLoading}
+                    textContent={'Loading...'}
+                    textStyle={{ color: '#fff' }}
+                    cancelable={true}
+                />
+                <View style={{ flex: 1, paddingBottom: 10 }}>
                     <View
                         style={{ ...styles.card }}
                     >
                         {/* <View style={{alignItems: 'center', ...styles.triangle}}/> */}
                         <CardItem bordered style={{ justifyContent: 'center', elevation: 1, borderRadius: 10 }}>
                             <View style={{ alignItems: 'center' }}>
-                                <H2 style={{ color: '#0288D1', fontWeight: 'bold' }}>Top Up</H2>
+                                <H1 style={{ color: '#0288D1', fontWeight: 'bold' }}>Balance</H1>
                                 <Text style={{ color: '#0288D1', fontWeight: 'bold' }}>GHS {this.GlobalProps.topup_balance}</Text>
                             </View>
                         </CardItem>
@@ -199,7 +190,7 @@ export default class TopUp extends React.Component {
 
                                 <View style={styles.buttonContainer}>
                                     <Button
-                                        success rounded block
+                                        success block style={{ elevation: 10 }}
                                         onPress={this.onInitiatePayment.bind(this)}
                                     >
                                         <Text>Checkout</Text>

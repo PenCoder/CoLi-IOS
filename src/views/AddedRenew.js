@@ -1,11 +1,12 @@
 import React from 'react';
-import { ScrollView, StyleSheet, ToastAndroid, ImageBackground, SafeAreaView, Dimensions, Alert, ActivityIndicator } from 'react-native';
+import { ScrollView, StyleSheet, ToastAndroid, ImageBackground, SafeAreaView, Dimensions, Alert } from 'react-native';
 import { Text, CardItem, Button, H1, H3, Thumbnail, View } from 'native-base';
 import { Icon, ListItem, Input, Overlay, Avatar } from 'react-native-elements';
 
 import { RadioButton, Chip } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
 import { inject, observer } from 'mobx-react';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 const { width, height } = Dimensions.get('window');
@@ -106,21 +107,12 @@ export default class AddedRenew extends React.Component {
         return (
             <SafeAreaView style={{ flex: 1, backgroundColor: 'rgba(236, 239, 241,1.0)' }}>
 
-                <Overlay
-                    isVisible={this.state.isInProgress}
-                    overlayStyle={{ backgroundColor: 'transparent', elevation: 0 }}
-                    containerStyle={{ backgroundColor: 'rgba(250, 250, 250, 0.9)' }}>
-                    <View style={{ flex: 1, justifyContent: 'center' }}>
-                        <ActivityIndicator
-                            size="large"
-                            style={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}
-                        />
-                    </View>
-                </Overlay>
+                <Spinner
+                    visible={this.state.isInProgress}
+                    textContent={'Loading...'}
+                    textStyle={{ color: '#fff' }}
+                    cancelable={true}
+                />
                 <View style={{ flex: 1 }}>
                     <View
                         style={{ ...styles.card }}

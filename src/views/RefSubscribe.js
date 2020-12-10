@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, ToastAndroid, ScrollView, SafeAreaView, ImageBackground, Alert, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ToastAndroid, ScrollView, SafeAreaView, ImageBackground, Alert } from 'react-native';
 import { Avatar, Input, Overlay, PricingCard, ListItem, CheckBox, Icon } from 'react-native-elements';
 import { H3, Button, Text, CardItem, Picker, H1 } from 'native-base';
 
@@ -9,6 +9,7 @@ import defaultStyles from '../../styles';
 import { Dimensions } from 'react-native';
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 import { RadioButton } from 'react-native-paper';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const communities = require('../assets/communities.json');
 
@@ -86,17 +87,12 @@ export default class RefSubscribe extends React.Component {
                     style={{ flex: 1, backgroundColor: 'rgba(1, 87, 155,1.0)' }}
                 >
 
-                    {/* this.state.isLoading ? */}
-                    <Overlay isVisible={this.state.isLoading}
-                        overlayStyle={{ backgroundColor: 'transparent', elevation: 0 }}
-                        containerStyle={{ backgroundColor: 'rgba(250, 250, 250, 0.7)' }}>
-                        <View style={{ flex: 1, justifyContent: 'center' }}>
-                            <ActivityIndicator
-                                size='large'
-                                style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-                            />
-                        </View>
-                    </Overlay>
+                    <Spinner
+                        visible={this.state.isLoading}
+                        textContent={'Loading...'}
+                        textStyle={{ color: '#fff' }}
+                        cancelable={true}
+                    />
 
                     <SafeAreaView style={{ flex: 1 }}>
                         <ImageBackground

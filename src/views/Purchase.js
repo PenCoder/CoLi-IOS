@@ -38,7 +38,7 @@ export default class Purchase extends React.Component {
                     <View style={{ backgroundColor: 'rgba(236, 239, 241,1.0)', borderRadius: 20, flex: 1, padding: 10 }}>
 
                         <ListItem
-                            title={'Unlimited Package'}
+                            title={'Package'}
                             subtitle={
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Icon name="package" type="feather" color="#bfbfbf" />

@@ -4,8 +4,6 @@ import { Text, Card, CardItem, Thumbnail, H3, H2, H1, Button } from 'native-base
 import { Avatar, Icon, Badge, ListItem } from 'react-native-elements';
 import { createStackNavigator } from 'react-navigation-stack';
 
-import Geolocation from '@react-native-community/geolocation';
-
 import defaultStyles from '../../styles';
 import { inject, observer } from 'mobx-react';
 

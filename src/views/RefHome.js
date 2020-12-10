@@ -13,7 +13,7 @@ import { ListItem, Badge, Overlay, ButtonGroup } from 'react-native-elements';
 import codePush from 'react-native-code-push';
 
 import defaultStyles from '../../styles';
-import { ActivityIndicator } from 'react-native-paper';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const { width } = Dimensions.get('window');
 
@@ -54,17 +54,12 @@ export default class RefHome extends React.Component {
 
     return (
       <View style={{ flex: 1, backgroundColor: 'rgba(247, 249, 250, 1)' }}>
-        <Overlay
-          isVisible={isLoading}
-          overlayStyle={{ backgroundColor: 'transparent', elevation: 0 }}
-          containerStyle={{ backgroundColor: 'rgba(250, 250, 250, 0.7)' }}>
-          <View style={{ flex: 1, justifyContent: 'center' }}>
-            <ActivityIndicator
-              size="large"
-              style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-            />
-          </View>
-        </Overlay>
+        <Spinner
+          visible={this.state.isLoading}
+          textContent={'Loading...'}
+          textStyle={{ color: '#fff' }}
+          cancelable={true}
+        />
         <CardItem style={{ elevation: 5 }}>
           <Text style={{ fontSize: 20 }}>Referral Code: </Text>
           <Text style={{ fontSize: 20 }} note>

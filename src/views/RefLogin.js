@@ -1,10 +1,11 @@
 import React from 'react';
-import { ImageBackground, StyleSheet, ToastAndroid, Dimensions, SafeAreaView, ActivityIndicator } from 'react-native';
+import { ImageBackground, StyleSheet, ToastAndroid, Dimensions, SafeAreaView } from 'react-native';
 import { Input, Overlay, Avatar, Button } from 'react-native-elements';
 import { H3, Text, CardItem, Icon, View } from 'native-base';
 
 import AsyncStorage from '@react-native-community/async-storage';
 import defaultStyles from '../../styles';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 // GLOBAL
 GLOBAL = require('../../global');
@@ -35,17 +36,12 @@ export default class RefLogin extends React.Component {
                     // source={require('../media/images/new_blue_bg.jpg')}
                     style={{ flex: 1, backgroundColor: '#275970' }}
                 >
-                    {/* this.state.isLoggedIn ?  */}
-                    <Overlay isVisible={this.state.isLoggedIn}
-                        overlayStyle={{ backgroundColor: 'transparent', elevation: 0 }}
-                        containerStyle={{ backgroundColor: 'rgba(250, 250, 250, 0.7)' }}>
-                        <View style={{ flex: 1, justifyContent: 'center' }}>
-                            <ActivityIndicator
-                                size='large'
-                                style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-                            />
-                        </View>
-                    </Overlay>
+                    <Spinner
+                        visible={this.state.isLoading}
+                        textContent={'Loading...'}
+                        textStyle={{ color: '#fff' }}
+                        cancelable={true}
+                    />
 
                     <View style={{ flex: 1 }}>
 
@@ -148,8 +144,8 @@ export default class RefLogin extends React.Component {
                 data.append('rfusnm', username);
                 data.append('pwd', pwd);
 
-                // var response = await fetch('https://coli.com.gh/dashboard/mobile/referral_account.php', {
-                var response = await fetch('http://192.168.47.1/dashboard/mobile/referral_account.php', {
+                var response = await fetch('https://coli.com.gh/dashboard/mobile/referral_account.php', {
+                    // var response = await fetch('http://192.168.47.1/dashboard/mobile/referral_account.php', {
                     method: 'POST',
                     body: data,
                     header: {

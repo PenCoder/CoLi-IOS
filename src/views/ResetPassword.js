@@ -1,21 +1,22 @@
 import React from 'react';
-import {ImageBackground, StyleSheet, KeyboardAvoidingView, ToastAndroid, Dimensions, ActivityIndicator, Alert, SafeAreaView} from 'react-native';
-import {Image, Avatar, Input, Overlay} from 'react-native-elements';
-import {Card, H1, H3, Button, Text, H2, CardItem, Icon, View} from 'native-base';
+import { ImageBackground, StyleSheet, KeyboardAvoidingView, ToastAndroid, Dimensions, Alert, SafeAreaView } from 'react-native';
+import { Image, Avatar, Input, Overlay } from 'react-native-elements';
+import { Card, H1, H3, Button, Text, H2, CardItem, Icon, View } from 'native-base';
 
-import AsyncStorage  from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-community/async-storage';
 import defaultStyles from '../../styles';
 import * as Animatable from 'react-native-animatable'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 // GLOBAL
 GLOBAL = require('../../global');
 // Screen Height and Width
-const {height, width} = Dimensions.get('screen');
+const { height, width } = Dimensions.get('screen');
 
 export default class ResetPassword extends React.Component {
-    constructor (props) {
+    constructor(props) {
         super(props);
         this.state = {
             uid: '',
@@ -29,114 +30,110 @@ export default class ResetPassword extends React.Component {
     static navigationOptions = {
         header: null
     }
-    
+
     render() {
-        
+
         return (
-            <SafeAreaView style={{flex: 1}}>
+            <SafeAreaView style={{ flex: 1 }}>
                 <ImageBackground
                     source={require('../media/images/new_blue_bg.jpg')}
-                    style={{flex: 1, backgroundColor: 'rgba(1, 87, 155,1.0)'}}
+                    style={{ flex: 1, backgroundColor: 'rgba(1, 87, 155,1.0)' }}
                 >
-                    <Overlay isVisible={this.state.isLoading} 
-                        overlayStyle={{backgroundColor: 'transparent', elevation: 0}} 
-                        containerStyle={{backgroundColor: 'rgba(250, 250, 250, 0.9)'}}>
-                        <View style={{flex: 1, justifyContent: 'center'}}>
-                            <ActivityIndicator
-                                size='large'
-                                style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
-                            />
-                        </View>
-                    </Overlay>
-                    
+                    <Spinner
+                        visible={this.state.isLoading}
+                        textContent={'Loading...'}
+                        textStyle={{ color: '#fff' }}
+                        cancelable={true}
+                    />
+
                     <View
-                        style={{flex: 1}}
-                    >  
-                        <View style={{height: 120, backgroundColor: 'white'}}>
+                        style={{ flex: 1 }}
+                    >
+                        <View style={{ height: 120, backgroundColor: 'white' }}>
                             <ImageBackground
-                                style={{flex: 1, paddingTop: 5, alignItems: 'center'}}
-                                imageStyle={{borderBottomRightRadius: 100}}
+                                style={{ flex: 1, paddingTop: 5, alignItems: 'center' }}
+                                imageStyle={{ borderBottomRightRadius: 100 }}
                                 source={require('../media/images/new_blue_bg.jpg')}
-                            >  
+                            >
                                 <Avatar
                                     rounded
                                     size={'large'}
-                                    icon={{name: 'shield', type: 'entypo'}}
-                                    overlayContainerStyle={{backgroundColor: 'rgba(250, 250, 250, 0.3)'}}
+                                    icon={{ name: 'shield', type: 'entypo' }}
+                                    overlayContainerStyle={{ backgroundColor: 'rgba(250, 250, 250, 0.3)' }}
                                 />
-                                <H1 style={{color: 'white', margin: 5}}>RESET PASSWORD</H1>
+                                <H1 style={{ color: 'white', margin: 5 }}>RESET PASSWORD</H1>
                             </ImageBackground>
-                            
-                        </View>
-                        
-                            <View
-                                style={{backgroundColor: 'white', borderTopLeftRadius: 80, flex: 1, paddingVertical: 30}}
-                            > 
-                                <KeyboardAwareScrollView style={{flex: 1}}>
-                                    <View style={defaultStyles.form}
-                                    >
-                                       
-                                        <Input 
-                                            placeholder='Username'
-                                            containerStyle={styles.input}
-                                            inputContainerStyle={{borderBottomWidth: 0}}
-                                            onChangeText={(txt) => this.onInputChange(txt, 'username')}
-                                            leftIcon={{name: 'user', type: 'font-awesome', color: 'grey'}}
-                                        />
-                                        
-                                        <Input
-                                            placeholder='New Password'
-                                            containerStyle={styles.input}
-                                            inputContainerStyle={{borderBottomWidth: 0}}
-                                            onChangeText={(pass) => this.onInputChange(pass, 'pwd')}
-                                            secureTextEntry={this.state.isPassword}
-                                            leftIcon={{name: 'shield', type: 'entypo', color: 'grey'}}
-                                            rightIcon={<Icon name={this.state.eye_icon} onPress={() => this.togglePwd()} />}
-                                        />
-                                        <Input
-                                            placeholder='Confirm Password'
-                                            containerStyle={styles.input}
-                                            inputContainerStyle={{borderBottomWidth: 0}}
-                                            onChangeText={(pass) => this.onInputChange(pass, 'confirm')}
-                                            secureTextEntry={this.state.isPassword}
-                                            leftIcon={{name: 'shield', type: 'entypo', color: 'grey'}}
-                                            rightIcon={<Icon name={this.state.eye_icon} onPress={() => this.togglePwd()} />}
-                                        />
-                                    </View>
-                                    <View>
-                                        <Button 
-                                            style={styles.button}
-                                            onPress={ this.onResetPassword.bind(this) }
-                                            info block
-                                        >
-                                            <Text>Submit</Text>
-                                        </Button>
-                                    </View>
-                                    <CardItem style={{marginVertical: 30}}>
-                                        <Icon name="corner-up-left" type="Feather" />
-                                        <Text style={{color: 'blue', textDecorationLine: 'underline'}}
-                                            onPress={() => this.props.navigation.navigate('Login')}
-                                        >
-                                            Back to Login
-                                        </Text>
-                                    </CardItem>
 
-                                </KeyboardAwareScrollView>
-                            </View>
+                        </View>
+
+                        <View
+                            style={{ backgroundColor: 'white', borderTopLeftRadius: 80, flex: 1, paddingVertical: 30 }}
+                        >
+                            <KeyboardAwareScrollView style={{ flex: 1 }}>
+                                <View style={defaultStyles.form}
+                                >
+
+                                    <Input
+                                        placeholder='Username'
+                                        containerStyle={styles.input}
+                                        inputContainerStyle={{ borderBottomWidth: 0 }}
+                                        onChangeText={(txt) => this.onInputChange(txt, 'username')}
+                                        leftIcon={{ name: 'user', type: 'font-awesome', color: 'grey' }}
+                                    />
+
+                                    <Input
+                                        placeholder='New Password'
+                                        containerStyle={styles.input}
+                                        inputContainerStyle={{ borderBottomWidth: 0 }}
+                                        onChangeText={(pass) => this.onInputChange(pass, 'pwd')}
+                                        secureTextEntry={this.state.isPassword}
+                                        leftIcon={{ name: 'shield', type: 'entypo', color: 'grey' }}
+                                        rightIcon={<Icon name={this.state.eye_icon} onPress={() => this.togglePwd()} />}
+                                    />
+                                    <Input
+                                        placeholder='Confirm Password'
+                                        containerStyle={styles.input}
+                                        inputContainerStyle={{ borderBottomWidth: 0 }}
+                                        onChangeText={(pass) => this.onInputChange(pass, 'confirm')}
+                                        secureTextEntry={this.state.isPassword}
+                                        leftIcon={{ name: 'shield', type: 'entypo', color: 'grey' }}
+                                        rightIcon={<Icon name={this.state.eye_icon} onPress={() => this.togglePwd()} />}
+                                    />
+                                </View>
+                                <View>
+                                    <Button
+                                        style={styles.button}
+                                        onPress={this.onResetPassword.bind(this)}
+                                        info block
+                                    >
+                                        <Text>Submit</Text>
+                                    </Button>
+                                </View>
+                                <CardItem style={{ marginVertical: 30 }}>
+                                    <Icon name="corner-up-left" type="Feather" />
+                                    <Text style={{ color: 'blue', textDecorationLine: 'underline' }}
+                                        onPress={() => this.props.navigation.navigate('Login')}
+                                    >
+                                        Back to Login
+                                        </Text>
+                                </CardItem>
+
+                            </KeyboardAwareScrollView>
+                        </View>
                     </View>
                 </ImageBackground>
-                
+
             </SafeAreaView>
         )
     }
-    
-    onResetPassword1 = async() => {
-        if(this.state.uid.trim() == ''){
+
+    onResetPassword1 = async () => {
+        if (this.state.uid.trim() == '') {
             ToastAndroid.show('Please input username!', ToastAndroid.LONG);
-        }else{
-            try{
+        } else {
+            try {
                 // Loader
-                this.setState({isLoading: true})
+                this.setState({ isLoading: true })
 
                 var data = new FormData();
                 data.append('usnm', this.state.uid);
@@ -151,55 +148,55 @@ export default class ResetPassword extends React.Component {
                     }
                 });
                 var result = await response.json();
-                
-                if(result[0] == 'success'){
+
+                if (result[0] == 'success') {
                     this.setState({
                         code: result[1],
                         isCodeSent: true
                     })
-                }else{
+                } else {
                     Alert.alert('', JSON.stringify(result))
                 }
-            }catch(e){
+            } catch (e) {
                 ToastAndroid.show(e.message, ToastAndroid.LONG);
-            }finally{
+            } finally {
                 this.setState({
                     isLoading: false
                 })
             }
-            
+
         }
     }
-    
+
     cancelForgetPassword = () => {
         this.setState({
             isForgotPassword: false
         })
     }
     onInputChange = (value, name) => {
-        switch(name){
+        switch (name) {
             case 'username':
-                this.setState({uid : value});
+                this.setState({ uid: value });
                 break;
             case 'pwd':
-                this.setState({pwd: value});
+                this.setState({ pwd: value });
                 break;
             case 'confirm':
-                this.setState({confirm: value});
+                this.setState({ confirm: value });
                 break;
             default:
                 break
         }
     }
     onResetPassword = async () => {
-        
-        var {uid, pwd, confirm} = this.state;
+
+        var { uid, pwd, confirm } = this.state;
         this.setState({
             isLoading: true
         })
-        try{
-            if(uid.trim() !== '' && pwd.trim() !== '' && confirm.trim() !== ''){
-                if(pwd !== confirm){
+        try {
+            if (uid.trim() !== '' && pwd.trim() !== '' && confirm.trim() !== '') {
+                if (pwd !== confirm) {
                     ToastAndroid.show('Passwords do not match.', ToastAndroid.LONG);
                     return;
                 }
@@ -217,42 +214,42 @@ export default class ResetPassword extends React.Component {
                     }
                 })
                 var json = await response.json();
-                
+
                 // Check if User Exists
-                if(json){
-                    if(json[0] === "success"){
+                if (json) {
+                    if (json[0] === "success") {
                         Alert.alert('Successful', 'Password successfully reset.');
                         this.props.navigation.navigate('Login');
 
-                    }else if(json[0] === "failed"){
+                    } else if (json[0] === "failed") {
                         Alert.alert('Failed', json[1]);
-                    }else{
+                    } else {
                         ToastAndroid.show(JSON.stringify(json), ToastAndroid.SHORT);
                     }
                 }
-                else{
+                else {
                     ToastAndroid.show('No User found', ToastAndroid.SHORT);
                 }
             }
-            else if (uid.trim() == ''){
+            else if (uid.trim() == '') {
                 ToastAndroid.show('Please Input Username!', ToastAndroid.LONG);
             }
-            else if (pwd.trim() !== ''){
+            else if (pwd.trim() !== '') {
                 ToastAndroid.show('Please Input New Password!', ToastAndroid.LONG);
             }
-            else if (confirm.trim() !== ''){
+            else if (confirm.trim() !== '') {
                 ToastAndroid.show('Please Input Confirm Password!', ToastAndroid.LONG);
             }
-        }catch (e){
+        } catch (e) {
             ToastAndroid.show(e.message, ToastAndroid.LONG)
-        }finally{
+        } finally {
             this.setState({
                 isLoading: false
             })
         }
     }
-    
-    
+
+
     togglePwd = () => {
         this.setState(prevState => ({
             eye_icon: prevState.eye_icon === 'eye' ? 'eye-off' : 'eye',
@@ -264,7 +261,7 @@ export default class ResetPassword extends React.Component {
     }
 
     componentDidMount() {
-        this.setState({isLoading: false})
+        this.setState({ isLoading: false })
     }
 }
 
@@ -272,9 +269,9 @@ export default class ResetPassword extends React.Component {
 const styles = StyleSheet.create({
     input_item: {
         width: '90%',
-        borderWidth: 0, 
-        borderRadius: 30, 
-        backgroundColor: 'rgba(236, 239, 241,1.0)', 
+        borderWidth: 0,
+        borderRadius: 30,
+        backgroundColor: 'rgba(236, 239, 241,1.0)',
         paddingLeft: 20,
         paddingBottom: 5,
         margin: 5
@@ -286,15 +283,15 @@ const styles = StyleSheet.create({
     },
     input: {
         width: '100%',
-        borderWidth: 0, 
-        borderRadius: 30, 
-        backgroundColor: 'rgba(236, 239, 241,1.0)', 
+        borderWidth: 0,
+        borderRadius: 30,
+        backgroundColor: 'rgba(236, 239, 241,1.0)',
         paddingBottom: 5,
         alignSelf: 'center',
         margin: 5,
     },
     buttonContainer: {
-        marginHorizontal: 20, 
+        marginHorizontal: 20,
         marginTop: 30
     },
     button: {
@@ -310,7 +307,7 @@ const styles = StyleSheet.create({
     },
     card: {
         // marginHorizontal: 20, 
-        borderRadius: 50, 
+        borderRadius: 50,
         backgroundColor: 'white',
         flex: 1
     },
@@ -327,9 +324,9 @@ const styles = StyleSheet.create({
         position: 'absolute'
     },
     translucent_pane: {
-        flex: 1, 
-        justifyContent: 'center', 
-        alignItems: "center", 
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: "center",
         // margin: 10, 
         backgroundColor: 'rgba(10, 10, 10,0.3)',
         borderRadius: 5

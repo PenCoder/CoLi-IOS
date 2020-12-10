@@ -2,10 +2,8 @@ import React from 'react';
 import {StyleSheet, TouchableNativeFeedback, ToastAndroid, ScrollView, ImageBackground, Dimensions} from 'react-native';
 import { Card, CardItem, H1, H2, H3, Text, H4, Container, StyleProvider, Badge, Button, View } from 'native-base';
 import {Icon, Avatar, ListItem, Image} from 'react-native-elements';
-
 import codePush from 'react-native-code-push'
 
-import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import defaultStyles from '../../styles';
 
 import AsyncStorage from '@react-native-community/async-storage';

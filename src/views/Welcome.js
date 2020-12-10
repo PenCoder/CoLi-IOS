@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ImageBackground, StyleSheet, KeyboardAvoidingView, ToastAndroid, TouchableNativeFeedback, Linking, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, SafeAreaView } from "react-native";
 import { Image, Button, Icon, Avatar, Overlay } from 'react-native-elements';
 import { Card, Form, Item, Label, H1, H3, Text, Toast, CardItem, Input } from 'native-base';
 
@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import defaultStyles from '../../styles';
 import { Chip } from 'react-native-paper';
 import { inject, observer } from 'mobx-react';
+import { RNToasty } from 'react-native-toasty';
 
 // GLOBAL
 GLOBAL = require('../../global');
@@ -26,14 +27,17 @@ export default class Welcome extends React.Component {
     }
 
     render() {
-
         const { navigate } = this.props.navigation;
-        return (
-            <View
-                style={{ flex: 1, backgroundColor: '#275970' }}
-            >
 
-                <View style={{ flex: 1, padding: 20, paddingTop: 60, justifyContent: 'center', /* backgroundColor: 'rgba(38, 50, 56,0.2)' */ }}>
+        return (
+            <SafeAreaView style={{ flex: 1, backgroundColor: '#275970' }}>
+                <CardItem style={styles.logo}>
+                    <Text style={{ color: '#1565C0', fontSize: 32, fontWeight: 'bold' }}>C</Text>
+                    <Text style={{ color: '#4CAF50', fontSize: 32, fontWeight: 'bold' }}>o</Text>
+                    <Text style={{ color: '#FFC107', fontSize: 32, fontWeight: 'bold' }}>L</Text>
+                    <Text style={{ color: '#D50000', fontSize: 32, fontWeight: 'bold' }}>i</Text>
+                </CardItem>
+                <View style={{ flex: 1, padding: 20, paddingTop: 60, justifyContent: 'center' }}>
 
                     <View style={{ alignItems: 'center', margin: 50 }}>
                         <Chip
@@ -43,8 +47,6 @@ export default class Welcome extends React.Component {
                         >
                             <H1 style={{ color: 'white', fontWeight: 'bold' }}>welcome</H1>
                         </Chip>
-                        {/* <H1 style={{ color: 'white' }}>welcome</H1> */}
-                        {/* <Text style={styles.bold_heading}>CoLi Link</Text> */}
                     </View>
                     <View style={{ flex: 1, paddingTop: 50 }}>
                         <Button
@@ -53,7 +55,7 @@ export default class Welcome extends React.Component {
                             buttonStyle={[styles.button_rounded]}
                             type={'outline'}
                             icon={{ name: 'user-circle-o', type: 'font-awesome', color: '#CFD8DC' }}
-                            onPress={() => this.openSection('Agent')}
+                            onPress={() => this.openSection('Main')}
                         />
                         <Button
                             title={'CoLi Referrer'}
@@ -63,14 +65,6 @@ export default class Welcome extends React.Component {
                             icon={{ name: 'users', type: 'font-awesome', color: '#CFD8DC' }}
                             onPress={() => this.openSection('Referral')}
                         />
-                        {/* <Button
-                            title={'CoLi Plus'}
-                            titleStyle={{ color: '#CFD8DC', fontSize: 24 }}
-                            buttonStyle={styles.button_rounded}
-                            type={'outline'}
-                            icon={{ name: 'live-tv', type: 'material', color: '#CFD8DC' }}
-                        // onPress={() => this.openSection('Plus')}
-                        /> */}
                     </View>
 
                     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-end' }}>
@@ -101,13 +95,8 @@ export default class Welcome extends React.Component {
                         </View>
                     </View>
                 </View>
-                <CardItem style={styles.logo}>
-                    <Text style={{ color: '#1565C0', fontSize: 32, fontWeight: 'bold' }}>C</Text>
-                    <Text style={{ color: '#4CAF50', fontSize: 32, fontWeight: 'bold' }}>o</Text>
-                    <Text style={{ color: '#FFC107', fontSize: 32, fontWeight: 'bold' }}>L</Text>
-                    <Text style={{ color: '#D50000', fontSize: 32, fontWeight: 'bold' }}>i</Text>
-                </CardItem>
-            </View>
+                
+            </SafeAreaView>
         )
     }
 
@@ -169,7 +158,11 @@ export default class Welcome extends React.Component {
                     }
 
                 } else {
-                    ToastAndroid.show('No User found', ToastAndroid.SHORT);
+                    RNToasty.Show({
+                        title: 'No User found',
+                        position: 'bottom',
+                        duration: 1
+                    });
                 }
             }
             else if (unStoredUser) {
@@ -192,7 +185,11 @@ export default class Welcome extends React.Component {
             });
         }
         catch (e) {
-            ToastAndroid.show(e.message, ToastAndroid.LONG);
+            RNToasty.Show({
+                title: e.message,
+                position: 'bottom',
+                duration: 1
+            })
             this.setState({
                 isLoggedIn: false,
             });
@@ -210,7 +207,11 @@ export default class Welcome extends React.Component {
     }
     openSubscribe = () => {
         if (Object.entries(this.Global.user) === 0) {
-            ToastAndroid.show("Logged In", ToastAndroid.LONG);
+            RNToasty.Show({
+                title: 'Logged In',
+                position: 'bottom',
+                duration: 1
+            });
             // this.props.navigation.navigate('Subscribe');
         }
         this.props.navigation.navigate('Auth');
@@ -232,8 +233,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         paddingBottom: -15,
         paddingRight: 30,
-        elevation: 5,
-        position: 'absolute'
+        ...defaultStyles.shadow5,
     },
     input_item: {
         // elevation: 5,
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
         margin: 10,
         borderColor: '#CFD8DC',
         backgroundColor: '#275970',
-        elevation: 5
+        ...defaultStyles.shadow5
     },
     elevate: {
         flex: 1,

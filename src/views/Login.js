@@ -3,7 +3,6 @@ import {
   ImageBackground,
   StyleSheet,
   Dimensions,
-  ActivityIndicator,
   Alert,
   SafeAreaView,
 } from 'react-native';
@@ -16,6 +15,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import codePush from 'react-native-code-push';
 import { RNToasty } from 'react-native-toasty';
 import { inject, observer } from 'mobx-react';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 // Screen Height and Width
@@ -52,21 +52,12 @@ export default class Login extends React.Component {
         <ImageBackground
           // source={require('../media/images/new_blue_bg.jpg')}
           style={{ flex: 1, backgroundColor: '#275970' }}>
-          <Overlay
-            isVisible={this.state.isLoggedIn}
-            overlayStyle={{ backgroundColor: 'transparent', elevation: 0 }}
-            containerStyle={{ backgroundColor: 'rgba(250, 250, 250, 0.9)' }}>
-            <View style={{ flex: 1, justifyContent: 'center' }}>
-              <ActivityIndicator
-                size="large"
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              />
-            </View>
-          </Overlay>
+          <Spinner
+            visible={this.state.isLoading}
+            textContent={'Loading...'}
+            textStyle={{ color: '#fff' }}
+            cancelable={true}
+          />
 
           <View style={{ flex: 1, justifyContent: 'center' }}>
             <View
@@ -296,8 +287,8 @@ export default class Login extends React.Component {
               fetch('http://api.coliserver.com/pmsapi.php?op=listpackage')
                 .then(packResponse => packResponse.json())
                 .then(async (packs) => {
-                  this.Global.updateProp('packs', packs);
-                  this.Global.packs.map(plan => {
+                  // this.Global.updateProp('packs', packs);
+                  packs.map(plan => {
                     if (
                       plan['Plan_name'].toLowerCase() == this.Global.user['Plan Name'].toLowerCase()
                     ) {
@@ -416,8 +407,8 @@ export default class Login extends React.Component {
             fetch('http://api.coliserver.com/pmsapi.php?op=listpackage')
               .then(packResponse => packResponse.json())
               .then(async (packs) => {
-                this.Global.updateProp('packs', packs);
-                this.Global.packs.map(plan => {
+                // this.Global.updateProp('packs', packs);
+                packs.map(plan => {
                   if (
                     plan['Plan_name'].toLowerCase() == this.Global.user['Plan Name'].toLowerCase()
                   ) {
@@ -536,8 +527,8 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     borderColor: 'grey',
     backgroundColor: 'rgba(236, 239, 241,0.1)',
-    paddingBottom: 5,
     alignSelf: 'center',
+    height: 50,
     margin: 5,
   },
   input_1: {

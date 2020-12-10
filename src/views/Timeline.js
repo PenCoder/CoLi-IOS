@@ -3,7 +3,6 @@ import { ScrollView, StyleSheet, ImageBackground, Dimensions } from 'react-nativ
 import { Text, CardItem, H1, H3, Button, View } from 'native-base';
 import { Avatar, Icon } from 'react-native-elements';
 
-
 // Default Styles
 import defaultStyles from '../../styles';
 import Moment from 'react-moment';
@@ -72,9 +71,6 @@ export default class Timeline extends React.Component {
                                 <H3>{due_date[0]}</H3>
                             </CardItem>
                             <CardItem bordered style={{ margin: 15, elevation: 5 }}>
-                                <H1>
-                                    {/* {moment(due_date).format('h:mm:ss a')} */}
-                                </H1>
                                 <Moment fromNow element={H1} style={{ textTransform: 'uppercase' }}>
                                     {user['Expiry Date']}
                                 </Moment>

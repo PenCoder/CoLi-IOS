@@ -5,7 +5,7 @@ import { ListItem, Badge, Overlay, ButtonGroup } from 'react-native-elements';
 import codePush from 'react-native-code-push';
 
 import defaultStyles from '../../styles';
-import { ActivityIndicator } from 'react-native-paper';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const { width } = Dimensions.get('window');
 
@@ -31,16 +31,12 @@ export default class RefReferrals extends React.Component {
 
         return (
             <View style={{ flex: 1, backgroundColor: 'rgba(236, 239, 241,1.0)' }}>
-                <Overlay isVisible={this.state.isLoading}
-                    overlayStyle={{ backgroundColor: 'transparent', elevation: 0 }}
-                    containerStyle={{ backgroundColor: 'rgba(250, 250, 250, 0.7)' }}>
-                    <View style={{ flex: 1, justifyContent: 'center' }}>
-                        <ActivityIndicator
-                            size='large'
-                            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-                        />
-                    </View>
-                </Overlay>
+                <Spinner
+                    visible={this.state.isLoading}
+                    textContent={'Loading...'}
+                    textStyle={{ color: '#fff' }}
+                    cancelable={true}
+                />
                 <ImageBackground
                     source={require('../media/images/new_blue_bg.jpg')}
                     style={{ width: width, alignSelf: 'center', borderRadius: 10, flex: 1 }}

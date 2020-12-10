@@ -1,19 +1,20 @@
 import React from 'react';
-import {View, ScrollView, StyleSheet, ToastAndroid, ImageBackground, SafeAreaView, Dimensions, Alert, Switch, ActivityIndicator} from 'react-native';
-import {Text, CardItem, Button, H1, H3, Thumbnail} from 'native-base';
+import { View, ScrollView, StyleSheet, ToastAndroid, ImageBackground, SafeAreaView, Dimensions, Alert, Switch } from 'react-native';
+import { Text, CardItem, Button, H1, H3, Thumbnail } from 'native-base';
 import { Icon, ListItem, Input, Overlay } from 'react-native-elements';
 
 import { RadioButton } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
 // GLOBAL
 GLOBAL = require('../../global');
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 // List of Package Names
 const packageNames = ['home', 'Regular', 'Basic', 'Standard', 'Business', 'Office', 'CoLiPlus'];
 
 export default class UnPayment extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.user = GLOBAL.user;
         this.pack = GLOBAL.selectedPack
@@ -25,7 +26,7 @@ export default class UnPayment extends React.Component {
             wallet: '',
             network: '',
             amount: GLOBAL.installationCost,
-            voucher: '', 
+            voucher: '',
             invoice: '',
 
             isLoading: false,
@@ -37,35 +38,35 @@ export default class UnPayment extends React.Component {
             isAddPackage: false
         }
     }
-    componentDidMount () {
-        if(packageNames.find(name => name.toLowerCase() == this.pack.Plan_name.toLowerCase())){
+    componentDidMount() {
+        if (packageNames.find(name => name.toLowerCase() == this.pack.Plan_name.toLowerCase())) {
             this.checkStoredInvoice();
-        }else{
+        } else {
             // Alert.alert('Non-Renewable', 'This package is currently not available for renewal.');
             Alert.alert(GLOBAL.selectedPack.Plan_name.toLowerCase())
             this.props.navigation.goBack();
         }
     }
     async checkStoredInvoice() {
-        try{
+        try {
             var invoice = await AsyncStorage.getItem('invoice-store');
-            if(invoice){
+            if (invoice) {
                 GLOBAL.invoice = invoice;
                 this.setState({
                     invoice
                 })
             }
-        }catch(e){
+        } catch (e) {
             ToastAndroid.show(e.message, ToastAndroid.LONG);
         }
     }
     inputChange = (e, name) => {
-        const {text} = e.nativeEvent;
+        const { text } = e.nativeEvent;
         this.setState({ [name]: text });
     }
     makePayment = () => {
         // Fetch Data Plans
-        
+
         fetch('192.168.43.34/coli_dashboard/payments/mob_cli.php', {
             method: 'POST',
             headers: {
@@ -84,92 +85,88 @@ export default class UnPayment extends React.Component {
                 description: 'Payment for your ' + this.pack['Plan_name'] + ' package.',
                 plan: this.pack['Plan_name']
             })
-        })   
-        .catch(() => {
-            ToastAndroid.show('User Info Incorrect!', ToastAndroid.SHORT);
         })
+            .catch(() => {
+                ToastAndroid.show('User Info Incorrect!', ToastAndroid.SHORT);
+            })
     }
-    render(){
-        return(
-            <SafeAreaView style={{flex: 1}}>
+    render() {
+        return (
+            <SafeAreaView style={{ flex: 1 }}>
                 <ImageBackground
                     source={require('../media/images/new_blue_bg.jpg')}
-                    style={{flex: 1, backgroundColor: 'rgba(236, 239, 241,1.0)'}}
+                    style={{ flex: 1, backgroundColor: 'rgba(236, 239, 241,1.0)' }}
                 >
-                    <Overlay isVisible={this.state.isLoading} 
-                        overlayStyle={{backgroundColor: 'transparent', elevation: 0}} 
-                        containerStyle={{backgroundColor: 'rgba(250, 250, 250, 0.7)'}}>
-                        <View style={{flex: 1, justifyContent: 'center'}}>
-                            <ActivityIndicator
-                                size='large'
-                                style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
-                            />
-                        </View>
-                    </Overlay>
+                    <Spinner
+                        visible={this.state.isLoading}
+                        textContent={'Loading...'}
+                        textStyle={{ color: '#fff' }}
+                        cancelable={true}
+                    />
 
-                    <CardItem style={{alignSelf: 'center', flex: 1, borderRadius: 20, backgroundColor: 'transparent'}}>
+                    <CardItem style={{ alignSelf: 'center', flex: 1, borderRadius: 20, backgroundColor: 'transparent' }}>
                         <View
-                            style={{...styles.card, backgroundColor: 'rgba(236, 239, 241,1.0)'}}
+                            style={{ ...styles.card, backgroundColor: 'rgba(236, 239, 241,1.0)' }}
                         >
                             {/* <View style={{alignItems: 'center', ...styles.triangle}}/> */}
-                            <CardItem style={{justifyContent: 'center', elevation: 2, borderRadius: 10}}>
-                                <View style={{alignItems: 'flex-end'}}>
-                                    <Text note style={{fontSize: 18}}>Installation Cost: GHC 149.00</Text>
+                            <CardItem style={{ justifyContent: 'center', elevation: 2, borderRadius: 10 }}>
+                                <View style={{ alignItems: 'flex-end' }}>
+                                    <Text note style={{ fontSize: 18 }}>Installation Cost: GHC 149.00</Text>
                                 </View>
                             </CardItem>
                             <ScrollView
-                                contentContainerStyle={{flexGrow: 1}}
+                                contentContainerStyle={{ flexGrow: 1 }}
                                 nestedScrollEnabled={true}
                             >
                                 {
                                     // Pending Invoice
                                     this.state.invoice.trim() !== '' ?
-                                    <View>
-                                        <ListItem
-                                            title='You have a pending invoice. Please complete payment and confirm payment.'
-                                            containerStyle={{backgroundColor: 'rgba(225, 245, 254,1.0)'}}
-                                            leftIcon={{name: 'info-circle', type: 'font-awesome', color: 'rgba(79, 195, 247,1.0)', size: 30}}
-                                        />
-                                        <CardItem>
-                                            <Button
-                                                iconLeft rounded info
-                                                style={{justifyContent: 'center', margin: 10}}
-                                                onPress={() => this.onConfirmPayment()}
-                                            >
-                                                <Text>Confirm</Text>
-                                            </Button>
-                                            <Button
-                                                iconLeft rounded light
-                                                style={{justifyContent: 'center', margin: 10}}
-                                                onPress={() => this.onCancelPending()}
-                                            >
-                                                <Text>Cancel</Text>
-                                            </Button>
+                                        <View>
+                                            <ListItem
+                                                title='You have a pending invoice. Please complete payment and confirm payment.'
+                                                containerStyle={{ backgroundColor: 'rgba(225, 245, 254,1.0)' }}
+                                                leftIcon={{ name: 'info-circle', type: 'font-awesome', color: 'rgba(79, 195, 247,1.0)', size: 30 }}
+                                            />
+                                            <CardItem>
+                                                <Button
+                                                    iconLeft rounded info
+                                                    style={{ justifyContent: 'center', margin: 10 }}
+                                                    onPress={() => this.onConfirmPayment()}
+                                                >
+                                                    <Text>Confirm</Text>
+                                                </Button>
+                                                <Button
+                                                    iconLeft rounded light
+                                                    style={{ justifyContent: 'center', margin: 10 }}
+                                                    onPress={() => this.onCancelPending()}
+                                                >
+                                                    <Text>Cancel</Text>
+                                                </Button>
 
 
-                                        </CardItem>
-                                    </View>
-                                    :
-                                    null
+                                            </CardItem>
+                                        </View>
+                                        :
+                                        null
                                 }
-                                <View style={{flexDirection: 'column'}}>
-                                    <CardItem style={{margin: 10}}>
-                                        <H3 style={{color: '#0D47A1'}}>Payment Details</H3>
+                                <View style={{ flexDirection: 'column' }}>
+                                    <CardItem style={{ margin: 10 }}>
+                                        <H3 style={{ color: '#0D47A1' }}>Payment Details</H3>
                                     </CardItem>
                                     <Input
                                         placeholder='Mobile Wallet Number'
                                         containerStyle={styles.input}
-                                        inputContainerStyle={{borderBottomWidth: 0}}
-                                        onChangeText={(phone) => this.setState({wallet: phone})}
+                                        inputContainerStyle={{ borderBottomWidth: 0 }}
+                                        onChangeText={(phone) => this.setState({ wallet: phone })}
                                         value={this.state.wallet}
-                                        leftIcon={{name: 'wallet', type: 'entypo'}}
+                                        leftIcon={{ name: 'wallet', type: 'entypo' }}
                                         keyboardType='number-pad'
                                     />
                                     <Input
                                         placeholder='Voucher Code (Vodafone only)'
                                         containerStyle={styles.input}
-                                        inputContainerStyle={{borderBottomWidth: 0}}
-                                        onChangeText={(txt) => this.setState({voucher: txt})}
+                                        inputContainerStyle={{ borderBottomWidth: 0 }}
+                                        onChangeText={(txt) => this.setState({ voucher: txt })}
                                         value={this.state.voucher}
                                         keyboardType='number-pad'
                                         disabled={this.state.network !== 'vodafone'}
@@ -177,63 +174,63 @@ export default class UnPayment extends React.Component {
                                             <Icon name="question-circle-o" type="font-awesome"
                                                 disabled={this.state.network !== 'vodafone'}
                                                 color="#0D47A1"
-                                                onPress={() => 
-                                                    Alert.alert('Generating Voucher Code', 
+                                                onPress={() =>
+                                                    Alert.alert('Generating Voucher Code',
                                                         'Dial *110#, select option 4. Make Payments, then option 4. Generate Voucher and follow the prompt to generate Voucher Code'
                                                     )
                                                 }
                                             />
                                         }
                                     />
-                                    
+
                                     <CardItem bordered>
                                         <Text>Select Network</Text>
                                     </CardItem>
-                                    <View style={{flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap', margin: 10}}>
-                                        <View style={styles.input, {flexDirection: 'row', margin: 2, alignItems: 'center'}}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap', margin: 10 }}>
+                                        <View style={styles.input, { flexDirection: 'row', margin: 2, alignItems: 'center' }}>
                                             <RadioButton
                                                 value={'mtn'}
                                                 color={'#4FC3F7'}
                                                 status={this.state.network == 'mtn' ? 'checked' : 'unchecked'}
-                                                onPress={() => this.setState({network: 'mtn'})}
+                                                onPress={() => this.setState({ network: 'mtn' })}
                                             />
                                             <Thumbnail square small source={require('../media/images/network-logos/mtn-momo-logo.jpg')} />
                                         </View>
-                                        <View style={styles.input, {flexDirection: 'row', margin: 2, alignItems: 'center'}}>
+                                        <View style={styles.input, { flexDirection: 'row', margin: 2, alignItems: 'center' }}>
                                             <RadioButton
                                                 value={'vodafone'}
                                                 color={'#4FC3F7'}
                                                 status={this.state.network == 'vodafone' ? 'checked' : 'unchecked'}
                                                 onPress={() => {
-                                                    this.setState({network: 'vodafone'})
-                                                    Alert.alert('Generating Voucher Code', 
+                                                    this.setState({ network: 'vodafone' })
+                                                    Alert.alert('Generating Voucher Code',
                                                         'Dial *110#, select option 4. Make Payments, then option 4. Generate Voucher and follow the prompt to generate Voucher Code'
                                                     )
                                                 }}
                                             />
                                             <Thumbnail square small source={require('../media/images/network-logos/vodafone-cash-logo.jpg')} />
                                         </View>
-                                        <View style={styles.input, {flexDirection: 'row', margin: 2, alignItems: 'center'}}>
+                                        <View style={styles.input, { flexDirection: 'row', margin: 2, alignItems: 'center' }}>
                                             <RadioButton
                                                 value={'airteltigo'}
                                                 color={'#4FC3F7'}
                                                 status={this.state.network == 'airtel' ? 'checked' : 'unchecked'}
-                                                onPress={() => this.setState({network: 'airtel'})}
+                                                onPress={() => this.setState({ network: 'airtel' })}
                                             />
                                             <Thumbnail square small source={require('../media/images/network-logos/airtelmoney.png')} />
                                         </View>
-                                        <View style={styles.input, {flexDirection: 'row', margin: 2, alignItems: 'center'}}>
+                                        <View style={styles.input, { flexDirection: 'row', margin: 2, alignItems: 'center' }}>
                                             <RadioButton
                                                 value={'airteltigo'}
                                                 color={'#4FC3F7'}
                                                 status={this.state.network == 'tigo' ? 'checked' : 'unchecked'}
-                                                onPress={() => this.setState({network: 'tigo'})}
+                                                onPress={() => this.setState({ network: 'tigo' })}
                                             />
                                             <Thumbnail square small source={require('../media/images/network-logos/tigocash.jpg')} />
                                         </View>
                                     </View>
                                 </View>
-                                
+
                                 <ListItem
                                     title="Add Package Cost"
                                     rightElement={
@@ -244,21 +241,21 @@ export default class UnPayment extends React.Component {
                                     }
                                 />
                                 {
-                                    this.state.isAddPackage ? 
-                                        <CardItem style={{justifyContent: 'space-between', elevation: 2, borderRadius: 10}}>
+                                    this.state.isAddPackage ?
+                                        <CardItem style={{ justifyContent: 'space-between', elevation: 2, borderRadius: 10 }}>
                                             <Text>Package Cost:</Text>
-                                            <Text note style={{fontSize: 18}}> GHC {GLOBAL.selectedPack['Pack_Cost']}</Text>
+                                            <Text note style={{ fontSize: 18 }}> GHC {GLOBAL.selectedPack['Pack_Cost']}</Text>
                                         </CardItem>
                                         :
                                         null
                                 }
-                                <CardItem style={{justifyContent: 'space-between', elevation: 2, borderRadius: 10}}>
+                                <CardItem style={{ justifyContent: 'space-between', elevation: 2, borderRadius: 10 }}>
                                     <H3>Total: </H3>
-                                    <Text note style={{fontSize: 18}}>GHC {this.state.amount}</Text>
+                                    <Text note style={{ fontSize: 18 }}>GHC {this.state.amount}</Text>
                                 </CardItem>
-                            </ScrollView> 
+                            </ScrollView>
                             <View style={styles.buttonContainer}>
-                                <Button 
+                                <Button
                                     style={styles.button}
                                     success
                                     onPress={this.onInitiatePayment.bind(this)}
@@ -266,31 +263,31 @@ export default class UnPayment extends React.Component {
                                     <Text>Submit</Text>
                                 </Button>
                             </View>
-                        </View> 
+                        </View>
                     </CardItem>
-                </ImageBackground> 
+                </ImageBackground>
                 {/* Payment Instructions */}
                 <Overlay
                     isVisible={this.state.isInitiated}
-                    // onBackdropPress={() => this.setState({isInitiated: false})}
+                // onBackdropPress={() => this.setState({isInitiated: false})}
                 >
-                    <View style={{flex: 1}}>
-                        <CardItem bordered style={{borderRadius: 10}}>
-                            <H1 style={{color: 'rgba(102, 187, 106,1.0)'}}>Amount: GHC {GLOBAL.selectedPack['Pack_Cost']}</H1>
+                    <View style={{ flex: 1 }}>
+                        <CardItem bordered style={{ borderRadius: 10 }}>
+                            <H1 style={{ color: 'rgba(102, 187, 106,1.0)' }}>Amount: GHC {GLOBAL.selectedPack['Pack_Cost']}</H1>
                         </CardItem>
                         <CardItem>
-                            <H3 style={{textTransform: 'uppercase'}}>{this.state.header}</H3>
+                            <H3 style={{ textTransform: 'uppercase' }}>{this.state.header}</H3>
                         </CardItem>
                         <CardItem>
-                            <Text note style={{fontStyle: 'italic'}}>Follow the step by step process to complete payment.</Text>
+                            <Text note style={{ fontStyle: 'italic' }}>Follow the step by step process to complete payment.</Text>
                         </CardItem>
                         <CardItem>
                             <Text>{this.state.instructions}</Text>
                         </CardItem>
 
-                        <CardItem style={{alignItems: 'flex-end'}}>
+                        <CardItem style={{ alignItems: 'flex-end' }}>
                             <Button
-                                onPress={() => this.setState({isInitiated: false})}
+                                onPress={() => this.setState({ isInitiated: false })}
                                 info rounded
                             >
                                 <Text>Close</Text>
@@ -298,13 +295,13 @@ export default class UnPayment extends React.Component {
                         </CardItem>
                     </View>
                 </Overlay>
-                            
+
             </SafeAreaView>
         )
     }
     switchAddPackageCost = (value) => {
         var total = 149;
-        if(value){
+        if (value) {
             total += parseInt(GLOBAL.selectedPack['Pack_Cost']);
         }
         this.setState({
@@ -313,22 +310,22 @@ export default class UnPayment extends React.Component {
         })
     }
     // Initiate Payment
-    async onInitiatePayment(){
+    async onInitiatePayment() {
 
-        const {name, username, wallet, phone, email, network, voucher, amount} = this.state;
-        
-        if(wallet.trim() == ''){
+        const { name, username, wallet, phone, email, network, voucher, amount } = this.state;
+
+        if (wallet.trim() == '') {
             ToastAndroid.show('Please Provide mobile money number!', ToastAndroid.LONG);
-        }else if(network.trim() == ''){
+        } else if (network.trim() == '') {
             ToastAndroid.show('Please select the network operator', ToastAndroid.LONG);
-        }else if( network == 'vodafone' && voucher.trim() == ''){
+        } else if (network == 'vodafone' && voucher.trim() == '') {
             ToastAndroid.show('Please provide the generated voucher code.', ToastAndroid.LONG);
         }
-        else{
+        else {
             this.setState({
                 isLoading: true
             })
-            try{
+            try {
                 var data = new FormData();
                 data.append('mob-initiate-payment', '_-_');
                 data.append('name', name);
@@ -340,7 +337,7 @@ export default class UnPayment extends React.Component {
                 data.append('amount', amount);
                 // data.append('pack', GLOBAL.user['Plan Name']);
                 data.append('voucher', voucher);
-                
+
                 // var response = await fetch('http://192.168.47.1/dashboard/mobile/mob_checkout.php', {
                 var response = await fetch('https://coli.com.gh/dashboard/mobile/mob_checkout.php', {
                     method: 'POST',
@@ -348,73 +345,73 @@ export default class UnPayment extends React.Component {
                     header: {
                         'Accept': 'application/json',
                         'Content-Type': 'multipart/form-data'
-                    }  
+                    }
                 });
-                
+
                 var content = await response.json();
                 this.setState({
                     isLoading: false
                 })
-                if(content[0] == 'success'){
-                    
+                if (content[0] == 'success') {
+
                     GLOBAL.invoice = content[1] + '';
-                    
+
                     // Local invoice store
                     await AsyncStorage.setItem('invoice-store', GLOBAL.invoice);
-                    
+
                     this.setState({
                         invoice: GLOBAL.invoice
                     })
-                    
-                    if(this.state.network == 'mtn'){
+
+                    if (this.state.network == 'mtn') {
                         var instruction_header = 'MTN Momo';
                         var instructions = '1. Dial *170# and Choose My Wallet (Option 6).\n' +
-                                            '2. Choose My Approvals(Option 3).\n' +
-                                            '3. Enter your MOMO pin to retrieve your pending approval list.\n' +
-                                            '4. Choose the transaction to approve.\n' +
-                                            '5. Click on the Confirm button, once you\'re done.\n' +
-                                            '6. Input your invoice ID and Submit';
+                            '2. Choose My Approvals(Option 3).\n' +
+                            '3. Enter your MOMO pin to retrieve your pending approval list.\n' +
+                            '4. Choose the transaction to approve.\n' +
+                            '5. Click on the Confirm button, once you\'re done.\n' +
+                            '6. Input your invoice ID and Submit';
                         // Display Instructions
                         this.setState({
                             header: instruction_header,
                             instructions: instructions,
                             isInitiated: true
                         })
-                    }else if (this.state.network == 'airteltigo'){
+                    } else if (this.state.network == 'airteltigo') {
                         ToastAndroid.show('ATIgo', ToastAndroid.LONG);
                         var instruction_header = 'AirtelTigo Cash';
                         var instructions = '1. Dial *110*4*3# on your AirtelTigo number to authorize the payment.' +
-                                            '2. Click on the Confirm button, once you\'re done.';
+                            '2. Click on the Confirm button, once you\'re done.';
                         // Display instructions
                         this.setState({
                             header: instruction_header,
                             instructions: instructions,
                             isInitiated: true
                         })
-                        
+
                     }
-                    else{
+                    else {
                         ToastAndroid.show('Awaiting Payment', ToastAndroid.LONG);
                     }
-                }else{
+                } else {
                     ToastAndroid.show(JSON.stringify(content), ToastAndroid.LONG);
                 }
-            }catch(e){
+            } catch (e) {
                 ToastAndroid.show(e.message, ToastAndroid.LONG);
-            }finally{
+            } finally {
                 this.setState({
                     isLoading: false
                 })
             }
         }
-        
+
     }
-    async onConfirmPayment(){
-        try{
+    async onConfirmPayment() {
+        try {
             var data = new FormData();
-            if(this.state.invoice.trim() == ''){
+            if (this.state.invoice.trim() == '') {
                 ToastAndroid.show('Please provide invoice ID', ToastAndroid.LONG);
-            }else{
+            } else {
                 // Start Loader
                 this.setState({
                     isLoading: true
@@ -434,19 +431,19 @@ export default class UnPayment extends React.Component {
                     header: {
                         'Accept': 'application/json',
                         'Content-Type': 'multipart/form-data'
-                    }  
+                    }
                 });
-                
+
                 var content = await response.text();
-                
+
                 // End Loader
                 this.setState({
                     isLoading: false
                 })
-                if(content.includes('awaiting')){
+                if (content.includes('awaiting')) {
                     ToastAndroid.show('Awaiting payment. Make payment from mobile money wallet.', ToastAndroid.LONG);
                 }
-                else if(content.includes('success')){
+                else if (content.includes('success')) {
                     this.setState({
                         isPaid: true
                     });
@@ -456,35 +453,35 @@ export default class UnPayment extends React.Component {
 
                     this.props.navigation.navigate('Auth');
 
-                }else{
+                } else {
                     ToastAndroid.show('Request failed. Please try again', ToastAndroid.LONG);
                 }
             }
-        }catch(e){
+        } catch (e) {
             ToastAndroid.show(e.message, ToastAndroid.LONG);
-        }finally{
+        } finally {
             this.setState({
                 isLoading: false
             })
         }
     }
     // Cancel Pending Invoice
-    async onCancelPending(){
-        try{
+    async onCancelPending() {
+        try {
             // Remove Stored Invoice and Package
             await AsyncStorage.removeItem('invoice-store');
             await AsyncStorage.removeItem('selecte-pack-store');
             this.setState({
                 invoice: ''
             })
-        }catch(e){
+        } catch (e) {
             ToastAndroid.show(e.message, ToastAndroid.LONG);
         }
     }
-    static navigationOptions = ({navigation}) => ({
+    static navigationOptions = ({ navigation }) => ({
         headerTitle: '',
         headerTransparent: true,
-        headerLeft: <Icon type="feather" name="arrow-left" color="#fff" onPress={() => navigation.goBack()}/>
+        headerLeft: <Icon type="feather" name="arrow-left" color="#fff" onPress={() => navigation.goBack()} />
     })
 }
 
@@ -492,9 +489,9 @@ export default class UnPayment extends React.Component {
 const styles = StyleSheet.create({
     input_item: {
         width: '100%',
-        borderWidth: 0, 
-        borderRadius: 30, 
-        backgroundColor: 'rgba(236, 239, 241,1.0)', 
+        borderWidth: 0,
+        borderRadius: 30,
+        backgroundColor: 'rgba(236, 239, 241,1.0)',
         paddingLeft: 20,
         paddingBottom: 5,
         alignSelf: 'center',
@@ -504,8 +501,8 @@ const styles = StyleSheet.create({
         marginVertical: -10
     },
     input: {
-        borderWidth: 0, 
-        borderRadius: 30, 
+        borderWidth: 0,
+        borderRadius: 30,
         // backgroundColor: 'rgba(236, 239, 241,1.0)', 
         paddingBottom: 5,
         alignSelf: 'center',
@@ -514,7 +511,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     buttonContainer: {
-        marginHorizontal: 0, 
+        marginHorizontal: 0,
         marginTop: 30
     },
     button: {
@@ -529,8 +526,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     card: {
-        paddingHorizontal: 10, 
-        borderRadius: 20, 
+        paddingHorizontal: 10,
+        borderRadius: 20,
         flex: 1
     },
     float: {
@@ -544,14 +541,14 @@ const styles = StyleSheet.create({
         position: 'absolute'
     },
     progressBtn: {
-        elevation: 5, 
-        backgroundColor: '#4FC3F7', 
-        borderRadius: 25, 
+        elevation: 5,
+        backgroundColor: '#4FC3F7',
+        borderRadius: 25,
         paddingHorizontal: 20
     },
     progressBtnText: {
         color: 'white'
-    }, 
+    },
     triangle: {
         width: 0,
         height: 0,
@@ -565,5 +562,5 @@ const styles = StyleSheet.create({
         borderTopColor: '#03A9F4',
         borderBottomRightRadius: 100,
         position: 'absolute'
-      }
+    }
 })
